@@ -1,5 +1,5 @@
 {
-  "name": "fetcher",
+  "name": "fetcheriser",
   "version": "1.0.0",
   "description": "Abstractions and Aliases for FETCH",
   "main": "index.js",
