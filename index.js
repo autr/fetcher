@@ -16,23 +16,30 @@ const rest = async ( method, url, args, silent ) => {
 
 
 	try {
+
+		let config = {}
+
 		if ( method == 'del' ) {
 			config = {
-				credentials: 'include' // same-origin,
+				...config,
+				credentials: 'include', // same-origin,
 				method: 'DELETE'
 			}
 		}
 
 		if ( method == 'get' && args ) {
 			const keys = Object.keys( args )
-			url += '?'
 			for (let i = 0; i < keys.length; i++) {
+				const key = keys[i]
 				if (i == 0) url += '?'
-				url += `${key}=${encodeURIComponent(args[key])}`
-				if (i != keys.length - 1) url += '&'
+				if ( args[key] != undefined && args[key] != '' ) {
+					url += `${key}=${encodeURIComponent(args[key])}`
+					if (i != keys.length - 1) url += '&'
+				}
 			}
 			config = {
-				credentials: 'include' // same-origin,
+				...config,
+				credentials: 'include', // same-origin,
 				method: method.toUpperCase()
 			}
 		}
@@ -40,21 +47,26 @@ const rest = async ( method, url, args, silent ) => {
 		if ( method == 'put' || method == 'post' ) {
 
 			config = {
-				credentials: 'include' // same-origin,
+				...config,
+				credentials: 'include', // same-origin,
 				method: method.toUpperCase(),
 				body: JSON.stringify( args || {} ),
 				headers: { 'Content-Type': 'application/json' }
 			}
 		}
+		if ( !silent ) console.log(`[fetcher] 🌟  ${url}`, config)
 
 		const res = await fetch( url, config )
+		let data = await res.text()
+	    try { data = JSON.parse( data ) } catch(err) { data = await res.text() }
 
-		console.log(`[fetcher] ✅  ${url}`)
 
-		return success( await res.text() )
+		if ( !silent ) console.log(`[fetcher] ✅  ${url}`, data)
+
+		return success( data )
 
 	} catch(err) {
-		console.log(`[fetcher] ❌  ${url}`, message, err.status)
+		if ( !silent ) console.error(`[fetcher] ❌  ${url}`, err.message, err.status, err.code)
 		return error( 500, err.message )
 	}
 }
