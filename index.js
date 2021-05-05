@@ -9,11 +9,7 @@ const success = ( data ) => {
 
 const rest = async ( method, url, args, silent ) => {
 
-
-	// TODO: REFACTOR TO FETCH (KEIN AXIOS)
-
 	if ( Array.isArray(url) ) url = url.join('/')
-
 
 	try {
 
@@ -60,13 +56,16 @@ const rest = async ( method, url, args, silent ) => {
 		let data = await res.text()
 	    try { data = JSON.parse( data ) } catch(err) { data = await res.text() }
 
+		if ( !res.ok || data.error ) console.log(`[fetcher] ❌  ${url}`, data.message, data.status, data.code)
+
+	    if ( !res.ok || data.error ) return data
 
 		if ( !silent ) console.log(`[fetcher] ✅  ${url}`, data)
 
 		return success( data )
 
 	} catch(err) {
-		if ( !silent ) console.error(`[fetcher] ❌  ${url}`, err.message, err.status, err.code)
+		if ( !silent ) console.log(`[fetcher] ❌  ${url}`, err.message, err.status, err.code)
 		return error( 500, err.message )
 	}
 }
