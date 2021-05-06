@@ -54,7 +54,7 @@ const rest = async ( method, url, args, silent ) => {
 
 		const res = await fetch( url, config )
 		let data = await res.text()
-	    try { data = JSON.parse( data ) } catch(err) { data = await res.text() }
+	    try { data = JSON.parse( data ) } catch(err) {}
 
 		if ( !res.ok || data.error ) console.log(`[fetcher] ❌  ${url}`, data.message, data.status, data.code)
 
