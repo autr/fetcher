@@ -50,6 +50,7 @@ const rest = async ( method, url, args, silent ) => {
 				headers: { 'Content-Type': 'application/json' }
 			}
 		}
+		
 		if ( !silent ) console.log(`[fetcher] 🌟  ${url}`, config)
 
 		const res = await fetch( url, config )
