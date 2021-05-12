@@ -81,4 +81,4 @@ names.forEach( n => {
 })
 
 
-module.exports = out
+export default out
