@@ -15,11 +15,11 @@ const rest = async ( method, url, args, silent ) => {
 
 		let config = {}
 
-		if ( method == 'del' ) {
+		if ( method == 'delete' ) {
 			config = {
 				...config,
 				credentials: 'include', // same-origin,
-				method: 'DELETE'
+				method: method.toUpperCase()
 			}
 		}
 
@@ -71,7 +71,7 @@ const rest = async ( method, url, args, silent ) => {
 	}
 }
 
-const names = ['get','post','del','put']
+const names = ['get','post','delete','put']
 let out = {}
 
 names.forEach( n => {
